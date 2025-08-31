@@ -1,0 +1,18 @@
+Identificación de errores de los principios SOLID
+
+1) Errores en el diseño 
+- ARP: Solo esta clase hace demasiadas cosas: calcular el pago, guardar en la BD, imprimir reporte. Deberían ser acciones separadas.
+- OCP: Para agregar un nuevo tipo de empleado hay que editar un `if/else` ya existente. Lo ideal es crear una nueva clase que extienda a la clase `Empleado` sin tocar lo que ya se hizo.
+- LSP: Se usa un `String tipo` en lugar de subclases. Eso no garantiza que todos los “empleados” se comporten igual de bien al sustituirlos.
+- ISP: El dominio termina con métodos de BD y reportería que no le corresponden.
+- DIP: El código crea implementaciones concretas (`new ...DB()`, `new ...Consola()`). Debería depender de interfaces e implementar las dependencias.
+
+2) Errores de implementación
+- Mezcla de lógica y salida por consola: `System.out.println` dentro del dominio confunde la lógica. Mejor que el dominio calcule y otra capa imprima y/o guarde.
+- Valores mágicos: Números como `1000.0` (bono) “sobrantes” en el código. Deben ser constantes o configurables.
+- Falta de validaciones: No se revisa si `salarioBase` es negativo o si `nombre` es un `null`.
+- Pocas anotaciones `@Override`: Al no ponerlas, es más fácil equivocarse en los métodos sobreescritos.
+
+3) Resumen corto
+- Hay mucho acoplamiento (dominio mezclado con BD/Consola) y condicionales por tipo.
+- Solución: polimorfismo (subclases de `Empleado`), interfaces para BD y reportería, inyección de dependencias, constantes para valores, y validar entradas.
